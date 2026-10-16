@@ -61,6 +61,7 @@ The most important change was not aggressive false-positive removal. The native-
 
 ## Final architecture
 
+```mermaid
 The final system uses a **global-local design**.
 
 flowchart TD
@@ -102,7 +103,7 @@ flowchart TD
     K --> L["Hysteresis instance extraction"]
     L --> M["Connected-component instances"]
     M --> N["Compressed COCO RLE submission"]
-
+```
 ### 1. Physics-guided image representation
 
 “Physics-guided” here means using **domain-informed image features** that make known solar-image structure explicit.
