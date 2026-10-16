@@ -63,38 +63,45 @@ The most important change was not aggressive false-positive removal. The native-
 
 The final system uses a **global-local design**.
 
-```mermaid
 flowchart TD
-    A[2048×2048 H-alpha image]
+    A["2048 × 2048 H-alpha image"]
 
-    A --> B[Preprocessing]
-    B --> B1[Radial-normalized intensity]
-    B --> B2[Local contrast]
-    B --> B3[Multi-scale dark-ridge response]
+    A --> B["Global physics preprocessing at 1024"]
+    B --> B1["Radial-normalized intensity"]
+    B --> B2["Local contrast"]
+    B --> B3["Multi-scale dark-ridge response"]
 
-    B1 --> C[Global model (from Version 4D) at 1024]
+    B1 --> C["V4-D Global MultiRes Attention U-Net"]
     B2 --> C
     B3 --> C
 
-    C --> D1[Global filament probability]
-    C --> D2[Global spine probability]
+    C --> D1["Global filament probability"]
+    C --> D2["Global spine probability"]
 
-    A --> E[Native 2048 preprocessing]
-    E --> F[Overlapping 512×512 tiles]
+    A --> E["Native physics preprocessing at 2048"]
+    E --> E1["Native radial-normalized intensity"]
+    E --> E2["Native local contrast"]
+    E --> E3["Native dark-ridge response"]
 
-    D1 --> G[Version 5-A local refinement]
+    E1 --> F["512 × 512 overlapping native tiles"]
+    E2 --> F
+    E3 --> F
+
+    D1 --> G["Upsample global priors to 2048"]
     D2 --> G
-    F --> G
 
-    G --> H[Feathered tile reconstruction]
-    D1 --> I[60% local + 40% global fusion]
-    H --> I
+    F --> H["V5-A Local MultiRes Attention U-Net"]
+    G --> H
 
-    I --> J[3-fold probability ensemble]
-    J --> K[Hysteresis + connected components]
-    K --> L[Non-overlapping filament instances]
-    L --> M[COCO RLE submission]
-```
+    H --> I["Feathered reconstruction of local probability"]
+    I --> J["60% local + 40% global probability"]
+
+    D1 --> J
+
+    J --> K["Average predictions from 3 folds"]
+    K --> L["Hysteresis instance extraction"]
+    L --> M["Connected-component instances"]
+    M --> N["Compressed COCO RLE submission"]
 
 ### 1. Physics-guided image representation
 
