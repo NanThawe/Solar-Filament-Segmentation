@@ -58,14 +58,13 @@ The most important change was not aggressive false-positive removal. The native-
 > **Finding from the metric:** the dominant remaining bottleneck was loss of thin structures during downsampling, not simply model capacity or threshold calibration.
 
 ---
-
 ## Final architecture
 
-```mermaid
 The final system uses a **global-local design**.
 
+```mermaid
 flowchart TD
-    A["2048 × 2048 H-alpha image"]
+    A["2048 x 2048 H-alpha image"]
 
     A --> B["Global physics preprocessing at 1024"]
     B --> B1["Radial-normalized intensity"]
@@ -84,7 +83,7 @@ flowchart TD
     E --> E2["Native local contrast"]
     E --> E3["Native dark-ridge response"]
 
-    E1 --> F["512 × 512 overlapping native tiles"]
+    E1 --> F["512 x 512 overlapping native tiles"]
     E2 --> F
     E3 --> F
 
@@ -96,7 +95,6 @@ flowchart TD
 
     H --> I["Feathered reconstruction of local probability"]
     I --> J["60% local + 40% global probability"]
-
     D1 --> J
 
     J --> K["Average predictions from 3 folds"]
